@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/foundation.min.css') }}">
+</head>
+<body>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div data-alert class="alert-box">
+            {% for message in messages %}
+                {{ message }}<br/>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
+<div class="row">
+  <div class="large-12 columns">
+    <h1>Settings</h1>
+  </div>
+</div>
+<form action="admin" method="POST" data-abide>
+    <div class="row">
+        <div class="large-4 columns">
+            <label>Twilio Account Sid <small>required</small>
+                <input type="text" id="twilioAccountSid" name="twilioAccountSid" value="{{ settings.twilioAccountSid }}" placeholder="Twilio Account Sid" required pattern="AC[a-zA-Z0-9]+"/>
+            </label>
+        </div>
+        <div class="large-4 columns">
+            <label>Twilio Auth Token <small>required</small>
+                <input type="password" id="twilioAuthToken" name="twilioAuthToken" value="{{ settings.twilioAuthToken }}" placeholder="Twilio Auth Token" required pattern="[a-zA-Z0-9]+" autocomplete="off"/>
+            </label>
+        </div>
+        <div class="large-4 columns">
+            <label>Twilio From Number <small>required</small>
+                <input type="text" id="twilioFromNumber" name="twilioFromNumber" value="{{ settings.twilioFromNumber }}" placeholder="Twilio From Number" required/>
+            </label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="large-12 column">
+            <label>Numbers to send SMS to <small>required</small>
+                <textarea id="toNumbers" name="toNumbers" placeholder="Numbers" rows="10" required>{% for toNumber in settings.toNumbers %}{{ toNumber }}
+{% endfor %}</textarea>
+            </label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="large-12 column">
+            <label>Repositories <small>Leave empty for all repositories, otherwise repository full name is required</small>
+                <textarea id="repositories" name="repositories" placeholder="Repositories" rows="10">{% for repository in settings.repositories %}{{ repository }}
+{% endfor %}</textarea>
+            </label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="large-12 column">
+            <label>Pull request actions</label>
+            <input type="checkbox" id="cbPROpened" name="prOpened" value="true" {{ 'checked="1"' if settings.prOpened else '' }}/><label for="cbOpened">Opened</label>
+            <input type="checkbox" id="cbPRClosed" name="prClosed" value="true" {{ 'checked="1"' if settings.prClosed else '' }}/><label for="cbClosed">Closed</label>
+            <input type="checkbox" id="cbPRSynchronize" name="prSynchronize" value="true" {{ 'checked="1"' if settings.prSynchronize else '' }}/><label for="cbSynchronize">Synchronize</label>
+            <input type="checkbox" id="cbPRReopened" name="prReopened" value="true" {{ 'checked="1"' if settings.prReopened else '' }}/><label for="cbReopened">Reopened</label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="small-1 column">
+            <button type="submit">Save</button>
+        </div>
+    </div>
+</form>
+</body>
+</html>
